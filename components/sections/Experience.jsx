@@ -1,84 +1,86 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useEffect, useState } from "react";
+
+function ScrambleText({ text, trigger, style }) {
+  const ref = { current: null };
+  const [displayed, setDisplayed] = useState(text);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%";
+
+  useEffect(() => {
+    if (!trigger) return;
+    let frame = 0;
+    const totalFrames = 20;
+    const interval = setInterval(() => {
+      frame++;
+      if (frame >= totalFrames) { setDisplayed(text); clearInterval(interval); return; }
+      const progress = frame / totalFrames;
+      setDisplayed(text.split("").map((char, i) => {
+        if (char === " ") return " ";
+        if (i / text.length < progress) return char;
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join(""));
+    }, 40);
+    return () => clearInterval(interval);
+  }, [trigger, text]);
+
+  return <span style={style}>{displayed}</span>;
+}
 
 const experiences = [
   {
     role: "Software Development Intern",
     org: "National Informatics Centre, MeitY",
     period: "May 2026 – Present",
-    points: ["Flutter app for government student verification", "REST APIs with Node.js, Express, PostgreSQL", "JWT auth + OTP verification", "Deployed on Railway/Render with Neon PostgreSQL"],
+    points: [
+      "Developed a Flutter-based mobile application for government student verification and declaration workflows.",
+      "Built and integrated REST APIs using Node.js, Express.js, and PostgreSQL.",
+      "Implemented JWT-based authentication, OTP verification, and secure data handling workflows.",
+      "Deployed backend infrastructure using Railway/Render with Neon-hosted PostgreSQL.",
+    ],
   },
   {
     role: "Senior Core Member",
     org: "Robovitics Club, VIT Vellore",
     period: "May 2025 – Present",
-    points: ["Led ROBOWARS at GraVITas tech fest", "Managed 40+ bots, 12L+ budget", "300+ participants across workshops", "Recruited 50+ junior members"],
+    points: [
+      "Led technical execution for ROBOWARS at GraVITas, managing 40+ bots and 12L+ budget.",
+      "Organized workshops engaging 300+ participants.",
+      "Recruited and onboarded 50+ junior members.",
+    ],
   },
 ];
 
-export default function Experience() {
-  const cardRef = useRef(null);
-  const titleRef = useRef(null);
-  const itemsRef = useRef([]);
-
+export default function Experience({ isActive }) {
+  const [triggered, setTriggered] = useState(false);
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(cardRef.current,
-        { y: 100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: cardRef.current, start: "top 92%" }
-        }
-      );
-      gsap.fromTo(titleRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: "power3.out",
-          scrollTrigger: { trigger: titleRef.current, start: "top 85%" }
-        }
-      );
-      itemsRef.current.forEach((el, i) => {
-        gsap.fromTo(el,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, delay: i * 0.15, ease: "power2.out",
-            scrollTrigger: { trigger: el, start: "top 88%" }
-          }
-        );
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+    if (isActive) setTimeout(() => setTriggered(true), 200);
+    else setTriggered(false);
+  }, [isActive]);
 
   return (
-    <section style={{ paddingBottom: "2rem", display: "flex", justifyContent: "center" }}>
-      <div ref={cardRef} style={{
-        background: "#7a1212",
-        width: "min(620px, 78vw)",
-        borderRadius: "12px",
-        padding: "2.5rem 2.5rem",
-        boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
-        border: "1px solid #9a2222",
-      }}>
-        <p style={{ fontSize: "0.6rem", letterSpacing: "0.3em", color: "#c4a0a0", marginBottom: "0.6rem" }}>02 / EXPERIENCE</p>
-        <h2 ref={titleRef} style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 5vw, 3rem)", fontWeight: 400, lineHeight: 1, color: "#f0e8e0", marginBottom: "2rem" }}>
-          where <em>i've been</em>
-        </h2>
+    <div style={{ width: "100%", height: "100%", background: "#1a1a18", padding: "4rem 6vw", overflowY: "auto" }}>
+      <h2 style={{ fontFamily: "'Space Mono', monospace", fontSize: "clamp(3rem, 10vw, 7rem)", fontWeight: 700, color: "#e8e0d5", lineHeight: 0.9, marginBottom: "0.3rem", letterSpacing: "-0.02em" }}>
+        <ScrambleText text="EXPERIENCE" trigger={triggered} />
+      </h2>
+      <p style={{ fontFamily: "'Caveat', cursive", fontSize: "1.4rem", color: "#c4a0a0", marginBottom: "3rem" }}>
+        Software Development Intern
+      </p>
 
-        {experiences.map((exp, i) => (
-          <div key={i} ref={(el) => (itemsRef.current[i] = el)} style={{ padding: "1.5rem 0", borderTop: "1px solid #5a1515", display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: "2rem" }}>
+      {experiences.map((exp, i) => (
+        <div key={i} style={{ marginBottom: "3rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
             <div>
-              <p style={{ color: "#f0e8e0", fontSize: "0.85rem", marginBottom: "0.3rem", lineHeight: 1.4 }}>{exp.role}</p>
-              <p style={{ color: "#e8b4b4", fontSize: "0.65rem", marginBottom: "0.2rem" }}>{exp.org}</p>
-              <p style={{ color: "#5a2222", fontSize: "0.6rem", fontFamily: "monospace" }}>{exp.period}</p>
+              <p style={{ fontSize: "1rem", color: "#e8e0d5", fontWeight: 700 }}>{exp.role}</p>
+              <p style={{ fontSize: "0.75rem", color: "#8B1A1A", marginTop: "0.2rem" }}>{exp.org}</p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              {exp.points.map((pt, j) => (
-                <p key={j} style={{ color: "#c4a0a0", fontSize: "0.75rem", lineHeight: "1.8", paddingLeft: "0.8rem", borderLeft: "1px solid #5a1515" }}>{pt}</p>
-              ))}
-            </div>
+            <p style={{ fontSize: "0.65rem", color: "#444", fontFamily: "monospace" }}>{exp.period}</p>
           </div>
-        ))}
-      </div>
-    </section>
+          {exp.points.map((pt, j) => (
+            <p key={j} style={{ fontSize: "0.82rem", color: "#777", lineHeight: "1.9", marginBottom: "0.6rem" }}>• {pt}</p>
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
