@@ -166,18 +166,8 @@ export default function Hero({ isActive }) {
   </p>
 </div>
 
-        {/* Group 2 — text silhouette, center */}
-        <div style={{
-          position: "absolute",
-          bottom: "0",
-          left: "50%",
-          transform: "translateX(-30%)",
-          zIndex: 2,
-          opacity: 0.35,
-          height: "65vh",
-        }}>
-          <img src="/images/Group 2.png" alt="" style={{ height: "100%", width: "auto", objectFit: "contain" }} />
-        </div>
+        {/* Group2 — text silhouette, center */}
+        
 
       </div>
       {/* end scaling wrapper */}

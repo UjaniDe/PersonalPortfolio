@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 function ScrambleText({ text, trigger }) {
   const [displayed, setDisplayed] = useState(text);
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%";
-
   useEffect(() => {
     if (!trigger) return;
     let frame = 0;
@@ -22,60 +22,401 @@ function ScrambleText({ text, trigger }) {
     }, 40);
     return () => clearInterval(interval);
   }, [trigger, text]);
-
   return <span>{displayed}</span>;
 }
 
 const projects = [
-  { title: "Reiterate", tech: "React · Node.js · MongoDB", desc: "Bias analysis platform for LLMs. 100+ prompt variants per experiment, sentiment scoring, side-by-side output visualization.", media: "/images/reiterate.mov", isVideo: true, link: "#" },
-  { title: "Taruner Swapno", tech: "Flutter · Node.js · PostgreSQL", desc: "Government student verification platform built at NIC, MeitY. JWT auth, OTP verification, REST APIs, cloud deployment.", media: "/images/project2.jpg", isVideo: false, link: "https://github.com/UjaniDe/taruner-swapno-backend" },
-  { title: "Sahasini", tech: "React · FastAPI · PostgreSQL", desc: "Crowdsourced urban safety incident reporting. Geospatial heatmaps, WebSockets, AI-driven insights. Won VinHack 2025.", media: "/images/project3.jpg", isVideo: false, link: "#" },
+
+  {
+  number: "01",
+  category: "PERSONAL",
+  title: "Reiterate",
+  tech: "React · Node.js · MongoDB · Gemini API",
+  desc: "...",
+  link: "#",
+  images: [
+    "/images/reiterate.mov",
+    "/images/project1.jpg",
+    "/images/project1.jpg"
+  ],
+  isVideo: [true, false, false]
+},
+  {
+    number: "02",
+    category: "GOVERNMENT · NIC INTERNSHIP",
+    title: "Taruner Swapno",
+    tech: "Flutter · Node.js · PostgreSQL · JWT · REST APIs",
+    desc: "Government-backed student verification platform developed during my internship at NIC. Built secure backend APIs for authentication, OTP workflows, and beneficiary verification.",
+    link: "https://github.com/UjaniDe/taruner-swapno-backend",
+    images: ["/images/project1.jpg", "/images/project2.jpeg", "/images/project1.jpg"],
+    isVideo: [false, false, false]
+  },
+
+  {
+    number: "03",
+    category: "HACKATHON · VINHACK 2025",
+    title: "Sahasini",
+    tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
+    desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
+    link: "#",
+    images: ["/images/project3.jpg", "/images/project2.jpeg", "/images/project1.jpg"],
+    isVideo: [false, false, false]
+  },
+
+  {
+  number: "04",
+  category: "HARDWARE · EMBEDDED SYSTEMS",
+  title: "Sentinel",
+  tech: "ESP32 · Arduino · Arduino IoT Cloud · C++ · Ultrasonic · Laser · Touch Sensor",
+  desc: "Embedded security system combining laser, touch and ultrasonic sensing with real-time cloud monitoring to detect physical intrusion events across multiple disturbance channels.",
+  link: "#",
+  images: ["/images/sentinel.jpg"],
+  isVideo: [false]
+}
 ];
+
+function ProjectCard({ project }) {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        padding: "2rem 2.5rem",
+        background: "#111110",
+       border: "2px solid rgba(255,255,255,0.9)",
+        borderRadius: "32px",
+        boxSizing: "border-box",
+        display: "grid",
+        gridTemplateColumns: "1fr 1.4fr",
+        gap: "2rem",
+      }}
+    >
+      {/* ── LEFT: text ── */}
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div>
+          {/* Category */}
+          <p
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "0.6rem",
+              letterSpacing: "0.22em",
+              color: "#9f9b9b",
+              textTransform: "uppercase",
+              marginBottom: "0.6rem",
+            }}
+          >
+            {project.category}
+          </p>
+
+          {/* Number + Title */}
+          <div style={{ display: "flex", alignItems: "baseline", gap: "1rem", marginBottom: "1.2rem" }}>
+            <span
+              style={{
+                fontFamily: "'Anton', sans-serif",
+                fontSize: "clamp(3rem, 6vw, 5rem)",
+                color: "rgba(236, 236, 236, 0.1)",
+                lineHeight: 1,
+                userSelect: "none",
+                flexShrink: 0,
+              }}
+            >
+              {project.number}
+            </span>
+            <h3
+              style={{
+                fontFamily: "'Anton', sans-serif",
+                fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
+                color: "#e8e0d5",
+                letterSpacing: "0.02em",
+                lineHeight: 1,
+                margin: 0,
+              }}
+            >
+              {project.title}
+            </h3>
+          </div>
+
+          {/* Divider */}
+          <div
+            style={{
+              height: "1px",
+              background: "rgba(232,224,213,0.08)",
+              marginBottom: "1.2rem",
+            }}
+          />
+
+          {/* Description */}
+          <p
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "clamp(0.78rem, 1.1vw, 0.95rem)",
+              color: "#a09890",
+              lineHeight: 1.75,
+              marginBottom: "1.5rem",
+              margin: 0,
+            }}
+          >
+            {project.desc}
+          </p>
+        </div>
+
+        <div>
+          {/* Tech pills */}
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "0.4rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {project.tech.split(" · ").map((t) => (
+              <span
+                key={t}
+                style={{
+                  fontFamily: "sans-serif",
+                  fontSize: "0.58rem",
+                  letterSpacing: "0.12em",
+                  color: "#fffdfd",
+                  border: "1px solid rgba(232,224,213,0.1)",
+                  borderRadius: "999px",
+                  padding: "0.25rem 0.7rem",
+                  textTransform: "uppercase",
+                }}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(232,224,213,0.08)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            style={{
+              alignSelf: "flex-start",
+              display: "inline-block",
+              border: "2px solid rgb(255, 239, 218)",
+              borderRadius: "999px",
+              padding: "0.5rem 1.4rem",
+              fontFamily: "sans-serif",
+              fontSize: "0.6rem",
+              letterSpacing: "0.2em",
+              color: "#e8e0d5",
+              textDecoration: "none",
+              textTransform: "uppercase",
+              background: "transparent",
+              transition: "background 0.2s",
+            }}
+          >
+            LIVE PROJECT ↗
+          </a>
+        </div>
+      </div>
+
+      {/* ── RIGHT: single image / video ── */}
+      <div
+        style={{
+          borderRadius: "20px",
+          overflow: "hidden",
+          background: "#1a1a18",
+          height: "100%",
+          
+        }}
+      >
+        {project.isVideo[0] ? (
+          <video
+            src={project.images[0]}
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              pointerEvents: "none",
+            }}
+          />
+        ) : (
+          <img
+            src={project.images[0]}
+            alt={project.title}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Transitions happen fast: card 2 at [0–0.35], card 3 at [0.35–0.7]
+// Leaving [0.7–1.0] as settled/rest at the end
+const TRANSITION_SLOTS = [
+  [0.00, 0.40],
+  [0.40, 0.70],
+  [0.70, 1.00],
+];
+
+function AnimatedCard({ project, index, total, scrollProgress }) {
+  const N = total;
+
+  const slot = index > 0 ? TRANSITION_SLOTS[index - 1] : null;
+
+  const y = useTransform(
+    scrollProgress,
+    slot ? [slot[0], slot[1]] : [0, 1],
+    slot ? ["100%", "0%"] : ["0%", "0%"]
+  );
+
+  // When the NEXT card comes in, this card scales down slightly
+  const nextSlot = index < N - 1 ? TRANSITION_SLOTS[index] : null;
+
+  const scale = useTransform(
+    scrollProgress,
+    nextSlot ? [nextSlot[0], nextSlot[1]] : [0, 1],
+    nextSlot ? [1, 0.97] : [1, 1]
+  );
+
+  const overlayOpacity = useTransform(
+    scrollProgress,
+    nextSlot ? [nextSlot[0], nextSlot[1]] : [0, 1],
+    nextSlot ? [0, 0.3] : [0, 0]
+  );
+
+  return (
+    <motion.div
+      style={{
+        position: "absolute",
+        inset: 0,
+        y,
+        scale,
+        transformOrigin: "top center",
+        zIndex: index + 1,
+        willChange: "transform",
+      }}
+    >
+      <ProjectCard project={project} />
+      <motion.div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "32px",
+          background: "#111110",
+          opacity: overlayOpacity,
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      />
+    </motion.div>
+  );
+}
+
+const HEADER_HEIGHT = "7rem";
 
 export default function Projects({ isActive }) {
   const [triggered, setTriggered] = useState(false);
-  const [active, setActive] = useState(0);
+  const scrollRef = useRef(null);
+  const N = projects.length;
 
   useEffect(() => {
     if (isActive) setTimeout(() => setTriggered(true), 200);
     else setTriggered(false);
   }, [isActive]);
 
-  const prev = () => setActive((a) => (a - 1 + projects.length) % projects.length);
-  const next = () => setActive((a) => (a + 1) % projects.length);
+  const { scrollYProgress } = useScroll({ container: scrollRef });
 
   return (
-    <div style={{ width: "100%", height: "100%", background: "#1a1a18", padding: "4rem 6vw", display: "flex", flexDirection: "column" }}>
-      <h2 style={{ fontFamily: "'Anton', sans-serif", fontSize: "clamp(3rem, 10vw, 7rem)", fontWeight: 700, color: "#e8e0d5", lineHeight: 0.9, marginBottom: "0.3rem", letterSpacing: "-0.02em" }}>
-        <ScrambleText text="PROJECTS" trigger={triggered} />
-      </h2>
-      <p style={{ fontFamily: "'Caveat', cursive", fontSize: "1.4rem", color: "#c4a0a0", marginBottom: "2rem" }}>
-        / software
-      </p>
+    <div
+      ref={scrollRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        background: "#1a1a18",
+        overflowY: "auto",
+        position: "relative",
+      }}
+    >
+      {/* Sticky header */}
+      <div
+        style={{
+          padding: "2rem 6vw 0.8rem",
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          background: "#1a1a18",
+          height: HEADER_HEIGHT,
+          boxSizing: "border-box",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "'Anton', sans-serif",
+            fontSize: "clamp(2.5rem, 8vw, 6rem)",
+            fontWeight: 700,
+            color: "#e8e0d5",
+            lineHeight: 0.9,
+            marginBottom: "0.2rem",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          <ScrambleText text="PROJECTS" trigger={triggered} />
+        </h2>
+        <p
+          style={{
+            fontFamily: "'Caveat', cursive",
+            fontSize: "clamp(1rem, 1.8vw, 1.4rem)",
+            color: "#c4a0a0",
+          }}
+        >
+          / software
+        </p>
+      </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "3rem", flex: 1, alignItems: "center" }}>
-        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", background: "#111", aspectRatio: "16/9" }}>
-          {projects[active].isVideo
-            ? <video src={projects[active].media} autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }} />
-            : <img src={projects[active].media} alt={projects[active].title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-          }
-          <button onClick={prev} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.6)", border: "1px solid #333", color: "#fff", width: "36px", height: "36px", borderRadius: "50%", cursor: "pointer", fontSize: "1rem" }}>{"<"}</button>
-          <button onClick={next} style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.6)", border: "1px solid #333", color: "#fff", width: "36px", height: "36px", borderRadius: "50%", cursor: "pointer", fontSize: "1rem" }}>{">"}</button>
-        </div>
-
-        <div>
-          <h3 style={{ fontFamily: "'Anton', sans-serif", fontSize: "clamp(1.8rem, 4vw, 3rem)", color: "#e8e0d5", fontWeight: 400, marginBottom: "0.8rem" }}>{projects[active].title}</h3>
-          <p style={{ fontFamily: "sans-serif", fontSize: "clamp(0.72rem, 1vw, 0.9rem)", color: "#8B1A1A", letterSpacing: "0.08em", marginBottom: "1rem", lineHeight: 2 }}>{projects[active].tech}</p>
-          <p style={{ fontFamily: "sans-serif", fontSize: "clamp(0.72rem, 1vw, 0.9rem)", color: "#777", lineHeight: "2", letterSpacing: "0.06em", marginBottom: "1.5rem" }}>{projects[active].desc}</p>
-          <a href={projects[active].link} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "sans-serif", fontSize: "clamp(0.65rem, 0.9vw, 0.8rem)", letterSpacing: "0.2em", color: "#e8e0d5", borderBottom: "1px solid #444", paddingBottom: "3px", textDecoration: "none" }}>VIEW PROJECT</a>
-
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "2rem" }}>
-            {projects.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)} style={{ width: i === active ? "24px" : "8px", height: "4px", borderRadius: "2px", background: i === active ? "#e8e0d5" : "#333", border: "none", cursor: "pointer", transition: "all 0.3s", padding: 0 }} />
+      {/* Scroll canvas */}
+      <div style={{ position: "relative", height: "400vh" }}>
+        {/* Pinned stage */}
+        <div
+          style={{
+            position: "sticky",
+            top: HEADER_HEIGHT,
+            height: `calc(98vh - ${HEADER_HEIGHT})`,
+            padding: "7.0rem 4vw 1.2rem",
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              borderRadius: "32px",
+              overflow: "hidden",
+            }}
+          >
+            {projects.map((project, i) => (
+              <AnimatedCard
+                key={i}
+                project={project}
+                index={i}
+                total={N}
+                scrollProgress={scrollYProgress}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      <div style={{ height: "10vh" }} />
     </div>
   );
 }
