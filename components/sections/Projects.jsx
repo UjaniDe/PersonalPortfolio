@@ -32,7 +32,7 @@ const projects = [
   category: "PERSONAL",
   title: "Reiterate",
   tech: "React · Node.js · MongoDB · Gemini API",
-  desc: "...",
+  desc: "An AI experimentation platform that evaluates Large Language Model responses by generating multiple prompt variations and comparing outputs. The platform analyzes response quality, sentiment, and consistency, enabling structured benchmarking of generative AI models.",
   link: "#",
   images: [
     "/images/reiterate.mov",
@@ -52,17 +52,18 @@ const projects = [
     isVideo: [false, false, false]
   },
 
-  {
-    number: "03",
-    category: "HACKATHON · VINHACK 2025",
-    title: "Sahasini",
-    tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
-    desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
-    link: "#",
-    images: ["/images/project3.jpg", "/images/project2.jpeg", "/images/project1.jpg"],
-    isVideo: [false, false, false]
-  },
-
+{
+  number: "03",
+  category: "HACKATHON · VINHACK 2025",
+  title: "Sahasini",
+  tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
+  desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
+  link: "#",
+  images: [
+    "/images/sahasani.mov"
+  ],
+  isVideo: [true]
+},
   {
   number: "04",
   category: "HARDWARE · EMBEDDED SYSTEMS",
@@ -70,7 +71,7 @@ const projects = [
   tech: "ESP32 · Arduino · Arduino IoT Cloud · C++ · Ultrasonic · Laser · Touch Sensor",
   desc: "Embedded security system combining laser, touch and ultrasonic sensing with real-time cloud monitoring to detect physical intrusion events across multiple disturbance channels.",
   link: "#",
-  images: ["/images/sentinel.jpg"],
+  images: ["/images/project4.png"],
   isVideo: [false]
 }
 ];
