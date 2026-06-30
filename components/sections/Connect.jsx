@@ -40,6 +40,141 @@ function LiveClock() {
   return { time, date };
 }
 
+// ── GitHub Contributions Graph ──
+const GITHUB_USERNAME = "UjaniDe";
+
+function GithubContributions() {
+  const [weeks, setWeeks] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`)
+      .then((res) => res.json())
+      .then((data) => {
+        const contributions = data.contributions || [];
+        setTotal(contributions.reduce((sum, d) => sum + d.count, 0));
+
+        // Group days into weeks (columns), starting from the first Sunday
+        const grouped = [];
+        let currentWeek = [];
+        contributions.forEach((day, i) => {
+          const date = new Date(day.date);
+          if (date.getDay() === 0 && currentWeek.length > 0) {
+            grouped.push(currentWeek);
+            currentWeek = [];
+          }
+          currentWeek.push(day);
+        });
+        if (currentWeek.length) grouped.push(currentWeek);
+        setWeeks(grouped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const cellSize = 11;
+  const cellGap = 3;
+  const colors = ["#1c1c1a", "#3a4d2e", "#5a7a3f", "#8fc24a", "#c5d94e"];
+
+  const monthLabels = [];
+  let lastMonth = null;
+  weeks.forEach((week, wi) => {
+    const firstDay = week[0];
+    if (!firstDay) return;
+    const month = new Date(firstDay.date).getMonth();
+    if (month !== lastMonth) {
+      monthLabels.push({ index: wi, label: new Date(firstDay.date).toLocaleString("en-US", { month: "short" }) });
+      lastMonth = month;
+    }
+  });
+
+  if (loading) {
+    return (
+      <p style={{ fontFamily: "sans-serif", fontSize: "0.75rem", color: "#444" }}>
+        Loading GitHub contributions…
+      </p>
+    );
+  }
+
+  return (
+    <div style={{ marginBottom: "2.5rem" }}>
+      <p
+        style={{
+          fontFamily: "sans-serif",
+          fontSize: "0.78rem",
+          color: "#777",
+          marginBottom: "0.8rem",
+          letterSpacing: "0.05em",
+        }}
+      >
+        GitHub Contributions
+      </p>
+
+      <div style={{ overflowX: "auto" }}>
+        <svg
+          width={weeks.length * (cellSize + cellGap)}
+          height={(cellSize + cellGap) * 7 + 16}
+        >
+          {/* Month labels */}
+          {monthLabels.map((m, i) => (
+            <text
+              key={i}
+              x={m.index * (cellSize + cellGap)}
+              y={10}
+              fontSize="10"
+              fill="#666"
+              fontFamily="sans-serif"
+            >
+              {m.label}
+            </text>
+          ))}
+
+          {/* Day cells */}
+          {weeks.map((week, wi) =>
+            week.map((day, di) => {
+              const level = Math.min(day.count > 0 ? Math.ceil(day.count / 3) : 0, 4);
+              return (
+                <rect
+                  key={`${wi}-${di}`}
+                  x={wi * (cellSize + cellGap)}
+                  y={di * (cellSize + cellGap) + 16}
+                  width={cellSize}
+                  height={cellSize}
+                  rx={3}
+                  fill={colors[level]}
+                />
+              );
+            })
+          )}
+        </svg>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.6rem" }}>
+        <p style={{ fontFamily: "sans-serif", fontSize: "0.7rem", color: "#555" }}>
+          {total.toLocaleString()} contributions in the last year on{" "}
+          <a
+            href={`https://github.com/${GITHUB_USERNAME}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#a09890", textDecoration: "underline" }}
+          >
+            GitHub
+          </a>
+          .
+        </p>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+          <span style={{ fontFamily: "sans-serif", fontSize: "0.65rem", color: "#555" }}>Less</span>
+          {colors.map((c, i) => (
+            <div key={i} style={{ width: 10, height: 10, borderRadius: 2, background: c }} />
+          ))}
+          <span style={{ fontFamily: "sans-serif", fontSize: "0.65rem", color: "#555" }}>More</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const links = [
   { label: "Email", href: "mailto:ujani.de2024@vitstudent.ac.in" },
   { label: "LinkedIn", href: "https://linkedin.com/in/ujani-de-b557a1351" },
@@ -66,6 +201,9 @@ export default function Connect({ isActive }) {
           </a>
         ))}
       </div>
+
+      {/* GitHub contributions graph */}
+      <GithubContributions />
 
       {/* bottom — footer like image 3 */}
       <div>

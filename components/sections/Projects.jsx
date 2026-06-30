@@ -28,7 +28,7 @@ function ScrambleText({ text, trigger }) {
 const projects = [
   {
     number: "01",
-    category: "SOFTWARE",
+    category: "Reiterate",
     title: "Reiterate",
     tech: "React · Node.js · MongoDB · Gemini API",
     desc: "An AI experimentation platform that evaluates Large Language Model responses by generating multiple prompt variations and comparing outputs. The platform analyzes response quality, sentiment, and consistency, enabling structured benchmarking of generative AI models.",
@@ -42,7 +42,7 @@ const projects = [
   },
   {
     number: "02",
-    category: "APP",
+    category: "Student Portal",
     title: "Student Declaration Portal",
     tech: "Flutter · Node.js · PostgreSQL · JWT · REST APIs",
     desc: "Government-backed student verification platform developed during my internship at NIC. Built secure backend APIs for authentication, OTP workflows, and beneficiary verification.",
@@ -52,7 +52,7 @@ const projects = [
   },
   {
     number: "03",
-    category: "WEB",
+    category: "Sahasini",
     title: "Sahasini",
     tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
     desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
@@ -64,7 +64,7 @@ const projects = [
   },
   {
     number: "04",
-    category: "HARDWARE ",
+    category: "Collision Alert",
     title: "IoT-Based Blind-Turn Collision Detection and Alert System",
     tech: "ESP32 · Arduino · Arduino IoT Cloud · C++ · Ultrasonic · Laser · Touch Sensor",
     desc: "Embedded security system combining laser, touch and ultrasonic sensing with real-time cloud monitoring to detect physical intrusion events across multiple disturbance channels.",
@@ -74,10 +74,21 @@ const projects = [
   }
 ];
 
-// Tab colors per project — cycles if you add more projects than colors
-const TAB_COLORS = ["#c5d94e", "#fff2db", "#585858", "#dcdcdc"];
+// Alternate off-white / black folder tabs
+const TAB_COLORS = ["#f0ead9", "#1c1c1a", "#f0ead9", "#1c1c1a"];
+
+// Subtle cardboard/paper grain — layered noise via repeating gradients
+const paperTexture = {
+  backgroundImage: `
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.035) 0px, rgba(0,0,0,0.035) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px)
+  `,
+  backgroundBlendMode: "overlay",
+};
 
 function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
+  const tabTextColor = tabColor === "#1c1c1a" ? "#f0ead9" : "#1c1c1a";
+
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       {/* ── Folder tab ── */}
@@ -97,6 +108,7 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
           justifyContent: "center",
           zIndex: 0,
           opacity: tabOpacity,
+          ...paperTexture,
         }}
       >
         <span
@@ -104,12 +116,12 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
             fontFamily: "monospace",
             fontSize: "0.7rem",
             letterSpacing: "0.15em",
-            color: "#111110",
+            color: tabTextColor,
             textTransform: "uppercase",
-            fontWeight: 700,
+            fontWeight: 800,
           }}
         >
-          {project.category.split(" · ")[0]}
+          {project.category}
         </span>
       </motion.div>
 
@@ -128,25 +140,12 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
           gap: "2rem",
           position: "relative",
           zIndex: 1,
+          ...paperTexture,
         }}
       >
         {/* ── LEFT: text ── */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: "5rem" }}>
           <div>
-            {/* Category */}
-            <p
-              style={{
-                fontFamily: "sans-serif",
-                fontSize: "0.6rem",
-                letterSpacing: "0.22em",
-                color: "#9f9b9b",
-                textTransform: "uppercase",
-                marginBottom: "0.6rem",
-              }}
-            >
-              {project.category}
-            </p>
-
             {/* Number + Title */}
             <div style={{ display: "flex", alignItems: "baseline", gap: "1rem", marginBottom: "1.2rem" }}>
               <span
@@ -169,6 +168,7 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
                   letterSpacing: "0.02em",
                   lineHeight: 1,
                   margin: 0,
+                  fontWeight: 900,
                 }}
               >
                 {project.title}
@@ -188,11 +188,12 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
             <p
               style={{
                 fontFamily: "sans-serif",
-                fontSize: "clamp(0.78rem, 1.1vw, 0.95rem)",
+                fontSize: "clamp(0.9rem, 1.1vw, 0.95rem)",
                 color: "#a09890",
                 lineHeight: 1.75,
                 marginBottom: "1.5rem",
                 margin: 0,
+                fontWeight: 600,
               }}
             >
               {project.desc}
@@ -200,33 +201,38 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
           </div>
 
           <div>
-            {/* Tech pills */}
-            <div
+            {/* Tech stack as bullets */}
+            <ul
               style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "0.4rem",
+                listStyle: "none",
+                margin: 0,
+                padding: 0,
                 marginBottom: "1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.35rem",
               }}
             >
               {project.tech.split(" · ").map((t) => (
-                <span
+                <li
                   key={t}
                   style={{
                     fontFamily: "sans-serif",
-                    fontSize: "0.58rem",
-                    letterSpacing: "0.12em",
+                    fontSize: "0.9rem",
+                    letterSpacing: "0.08em",
                     color: "#fffdfd",
-                    border: "1px solid rgba(232,224,213,0.1)",
-                    borderRadius: "999px",
-                    padding: "0.25rem 0.7rem",
                     textTransform: "uppercase",
+                    fontWeight: 800,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
                   }}
                 >
+                  <span style={{ color: tabColor === "#1c1c1a" ? "#f0ead9" : tabColor }}>●</span>
                   {t}
-                </span>
+                </li>
               ))}
-            </div>
+            </ul>
 
             {/* CTA */}
             <a
@@ -249,6 +255,7 @@ function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
                 textTransform: "uppercase",
                 background: "transparent",
                 transition: "background 0.2s",
+                fontWeight: 800,
               }}
             >
               LIVE PROJECT ↗
@@ -332,7 +339,6 @@ function AnimatedCard({ project, index, total, scrollProgress }) {
     nextSlot ? [0, 0.3] : [0, 0]
   );
 
-  // Tab fades out as the next card comes in, so old tabs don't stay visible forever
   const tabOpacity = useTransform(overlayOpacity, (v) => 1 - v);
 
   return (
