@@ -47,7 +47,7 @@ const projects = [
     tech: "Flutter · Node.js · PostgreSQL · JWT · REST APIs",
     desc: "Government-backed student verification platform developed during my internship at NIC. Built secure backend APIs for authentication, OTP workflows, and beneficiary verification.",
     link: "https://github.com/UjaniDe/taruner-swapno-backend",
-    images: ["/images/app1.jpg", "/images/project2.jpeg", "/images/project1.jpg"],
+    images: ["/images/app1.png", "/images/app1.png", "/images/project1.png"],
     isVideo: [false, false, false]
   },
   {
