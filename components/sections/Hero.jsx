@@ -125,7 +125,7 @@ export default function Hero({ isActive }) {
   letterSpacing: "0.06em",
   marginBottom: "1rem",
 }}>
-            In my free time, I'm nerdy about tech gadgets, love literary fiction, and play way too many battle royale games. Oh, I make content too.
+            In my free time, I'm nerdy about tech gadgets, love literary fiction.
           </p>
         </div>
 
