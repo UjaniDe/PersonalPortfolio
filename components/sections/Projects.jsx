@@ -26,235 +26,273 @@ function ScrambleText({ text, trigger }) {
 }
 
 const projects = [
-
   {
-  number: "01",
-  category: "PERSONAL",
-  title: "Reiterate",
-  tech: "React · Node.js · MongoDB · Gemini API",
-  desc: "An AI experimentation platform that evaluates Large Language Model responses by generating multiple prompt variations and comparing outputs. The platform analyzes response quality, sentiment, and consistency, enabling structured benchmarking of generative AI models.",
-  link: "#",
-  images: [
-    "/images/reiterate.mov",
-    "/images/project1.jpg",
-    "/images/project1.jpg"
-  ],
-  isVideo: [true, false, false]
-},
+    number: "01",
+    category: "SOFTWARE",
+    title: "Reiterate",
+    tech: "React · Node.js · MongoDB · Gemini API",
+    desc: "An AI experimentation platform that evaluates Large Language Model responses by generating multiple prompt variations and comparing outputs. The platform analyzes response quality, sentiment, and consistency, enabling structured benchmarking of generative AI models.",
+    link: "#",
+    images: [
+      "/images/reiterate.mov",
+      "/images/project1.jpg",
+      "/images/project1.jpg"
+    ],
+    isVideo: [true, false, false]
+  },
   {
     number: "02",
-    category: "GOVERNMENT · NIC INTERNSHIP",
-    title: "Taruner Swapno",
+    category: "APP",
+    title: "Student Declaration Portal",
     tech: "Flutter · Node.js · PostgreSQL · JWT · REST APIs",
     desc: "Government-backed student verification platform developed during my internship at NIC. Built secure backend APIs for authentication, OTP workflows, and beneficiary verification.",
     link: "https://github.com/UjaniDe/taruner-swapno-backend",
     images: ["/images/project1.jpg", "/images/project2.jpeg", "/images/project1.jpg"],
     isVideo: [false, false, false]
   },
-
-{
-  number: "03",
-  category: "HACKATHON · VINHACK 2025",
-  title: "Sahasini",
-  tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
-  desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
-  link: "#",
-  images: [
-    "/images/sahasani.mov"
-  ],
-  isVideo: [true]
-},
   {
-  number: "04",
-  category: "HARDWARE · EMBEDDED SYSTEMS",
-  title: "Sentinel",
-  tech: "ESP32 · Arduino · Arduino IoT Cloud · C++ · Ultrasonic · Laser · Touch Sensor",
-  desc: "Embedded security system combining laser, touch and ultrasonic sensing with real-time cloud monitoring to detect physical intrusion events across multiple disturbance channels.",
-  link: "#",
-  images: ["/images/project4.png"],
-  isVideo: [false]
-}
+    number: "03",
+    category: "WEB",
+    title: "Sahasini",
+    tech: "React · FastAPI · PostgreSQL · Leaflet · Python",
+    desc: "Crowdsourced women's safety platform featuring interactive safety maps, incident reporting, and geospatial visualization for safer urban navigation.",
+    link: "#",
+    images: [
+      "/images/sahasani.mov"
+    ],
+    isVideo: [true]
+  },
+  {
+    number: "04",
+    category: "HARDWARE ",
+    title: "IoT-Based Blind-Turn Collision Detection and Alert System",
+    tech: "ESP32 · Arduino · Arduino IoT Cloud · C++ · Ultrasonic · Laser · Touch Sensor",
+    desc: "Embedded security system combining laser, touch and ultrasonic sensing with real-time cloud monitoring to detect physical intrusion events across multiple disturbance channels.",
+    link: "#",
+    images: ["/images/project4.png"],
+    isVideo: [false]
+  }
 ];
 
-function ProjectCard({ project }) {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        padding: "2rem 2.5rem",
-        background: "#111110",
-       border: "2px solid rgba(255,255,255,0.9)",
-        borderRadius: "32px",
-        boxSizing: "border-box",
-        display: "grid",
-        gridTemplateColumns: "1fr 1.4fr",
-        gap: "2rem",
-      }}
-    >
-      {/* ── LEFT: text ── */}
-      <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-        <div>
-          {/* Category */}
-          <p
-            style={{
-              fontFamily: "sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.22em",
-              color: "#9f9b9b",
-              textTransform: "uppercase",
-              marginBottom: "0.6rem",
-            }}
-          >
-            {project.category}
-          </p>
+// Tab colors per project — cycles if you add more projects than colors
+const TAB_COLORS = ["#c5d94e", "#fff2db", "#585858", "#dcdcdc"];
 
-          {/* Number + Title */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "1rem", marginBottom: "1.2rem" }}>
-            <span
+function ProjectCard({ project, tabColor, tabOffset, tabOpacity }) {
+  return (
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      {/* ── Folder tab ── */}
+      <motion.div
+        style={{
+          position: "absolute",
+          top: "-30px",
+          left: `${40 + tabOffset}px`,
+          width: "180px",
+          height: "44px",
+          background: tabColor,
+          border: `2px solid ${tabColor}`,
+          borderBottom: "none",
+          borderRadius: "14px 14px 0 0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 0,
+          opacity: tabOpacity,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "monospace",
+            fontSize: "0.7rem",
+            letterSpacing: "0.15em",
+            color: "#111110",
+            textTransform: "uppercase",
+            fontWeight: 700,
+          }}
+        >
+          {project.category.split(" · ")[0]}
+        </span>
+      </motion.div>
+
+      {/* ── Card body ── */}
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          padding: "2rem 2.5rem",
+          background: "#111110",
+          border: `2px solid ${tabColor}`,
+          borderRadius: "32px",
+          boxSizing: "border-box",
+          display: "grid",
+          gridTemplateColumns: "1fr 1.4fr",
+          gap: "2rem",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        {/* ── LEFT: text ── */}
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div>
+            {/* Category */}
+            <p
               style={{
-                fontFamily: "'Anton', sans-serif",
-                fontSize: "clamp(3rem, 6vw, 5rem)",
-                color: "rgba(236, 236, 236, 0.1)",
-                lineHeight: 1,
-                userSelect: "none",
-                flexShrink: 0,
+                fontFamily: "sans-serif",
+                fontSize: "0.6rem",
+                letterSpacing: "0.22em",
+                color: "#9f9b9b",
+                textTransform: "uppercase",
+                marginBottom: "0.6rem",
               }}
             >
-              {project.number}
-            </span>
-            <h3
+              {project.category}
+            </p>
+
+            {/* Number + Title */}
+            <div style={{ display: "flex", alignItems: "baseline", gap: "1rem", marginBottom: "1.2rem" }}>
+              <span
+                style={{
+                  fontFamily: "'Anton', sans-serif",
+                  fontSize: "clamp(3rem, 6vw, 5rem)",
+                  color: "rgba(236, 236, 236, 0.1)",
+                  lineHeight: 1,
+                  userSelect: "none",
+                  flexShrink: 0,
+                }}
+              >
+                {project.number}
+              </span>
+              <h3
+                style={{
+                  fontFamily: "'Anton', sans-serif",
+                  fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
+                  color: "#e8e0d5",
+                  letterSpacing: "0.02em",
+                  lineHeight: 1,
+                  margin: 0,
+                }}
+              >
+                {project.title}
+              </h3>
+            </div>
+
+            {/* Divider */}
+            <div
               style={{
-                fontFamily: "'Anton', sans-serif",
-                fontSize: "clamp(1.4rem, 2.5vw, 2rem)",
-                color: "#e8e0d5",
-                letterSpacing: "0.02em",
-                lineHeight: 1,
+                height: "1px",
+                background: "rgba(232,224,213,0.08)",
+                marginBottom: "1.2rem",
+              }}
+            />
+
+            {/* Description */}
+            <p
+              style={{
+                fontFamily: "sans-serif",
+                fontSize: "clamp(0.78rem, 1.1vw, 0.95rem)",
+                color: "#a09890",
+                lineHeight: 1.75,
+                marginBottom: "1.5rem",
                 margin: 0,
               }}
             >
-              {project.title}
-            </h3>
+              {project.desc}
+            </p>
           </div>
 
-          {/* Divider */}
-          <div
-            style={{
-              height: "1px",
-              background: "rgba(232,224,213,0.08)",
-              marginBottom: "1.2rem",
-            }}
-          />
+          <div>
+            {/* Tech pills */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.4rem",
+                marginBottom: "1.5rem",
+              }}
+            >
+              {project.tech.split(" · ").map((t) => (
+                <span
+                  key={t}
+                  style={{
+                    fontFamily: "sans-serif",
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.12em",
+                    color: "#fffdfd",
+                    border: "1px solid rgba(232,224,213,0.1)",
+                    borderRadius: "999px",
+                    padding: "0.25rem 0.7rem",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
 
-          {/* Description */}
-          <p
-            style={{
-              fontFamily: "sans-serif",
-              fontSize: "clamp(0.78rem, 1.1vw, 0.95rem)",
-              color: "#a09890",
-              lineHeight: 1.75,
-              marginBottom: "1.5rem",
-              margin: 0,
-            }}
-          >
-            {project.desc}
-          </p>
-        </div>
-
-        <div>
-          {/* Tech pills */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "0.4rem",
-              marginBottom: "1.5rem",
-            }}
-          >
-            {project.tech.split(" · ").map((t) => (
-              <span
-                key={t}
-                style={{
-                  fontFamily: "sans-serif",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.12em",
-                  color: "#fffdfd",
-                  border: "1px solid rgba(232,224,213,0.1)",
-                  borderRadius: "999px",
-                  padding: "0.25rem 0.7rem",
-                  textTransform: "uppercase",
-                }}
-              >
-                {t}
-              </span>
-            ))}
+            {/* CTA */}
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(232,224,213,0.08)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+              style={{
+                alignSelf: "flex-start",
+                display: "inline-block",
+                border: "2px solid rgb(255, 239, 218)",
+                borderRadius: "999px",
+                padding: "0.5rem 1.4rem",
+                fontFamily: "sans-serif",
+                fontSize: "0.6rem",
+                letterSpacing: "0.2em",
+                color: "#e8e0d5",
+                textDecoration: "none",
+                textTransform: "uppercase",
+                background: "transparent",
+                transition: "background 0.2s",
+              }}
+            >
+              LIVE PROJECT ↗
+            </a>
           </div>
-
-          {/* CTA */}
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(232,224,213,0.08)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-            style={{
-              alignSelf: "flex-start",
-              display: "inline-block",
-              border: "2px solid rgb(255, 239, 218)",
-              borderRadius: "999px",
-              padding: "0.5rem 1.4rem",
-              fontFamily: "sans-serif",
-              fontSize: "0.6rem",
-              letterSpacing: "0.2em",
-              color: "#e8e0d5",
-              textDecoration: "none",
-              textTransform: "uppercase",
-              background: "transparent",
-              transition: "background 0.2s",
-            }}
-          >
-            LIVE PROJECT ↗
-          </a>
         </div>
-      </div>
 
-      {/* ── RIGHT: single image / video ── */}
-      <div
-        style={{
-          borderRadius: "20px",
-          overflow: "hidden",
-          background: "#1a1a18",
-          height: "100%",
-          
-        }}
-      >
-        {project.isVideo[0] ? (
-          <video
-            src={project.images[0]}
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-              pointerEvents: "none",
-            }}
-          />
-        ) : (
-          <img
-            src={project.images[0]}
-            alt={project.title}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
-          />
-        )}
+        {/* ── RIGHT: single image / video ── */}
+        <div
+          style={{
+            borderRadius: "20px",
+            overflow: "hidden",
+            background: "#1a1a18",
+            height: "100%",
+          }}
+        >
+          {project.isVideo[0] ? (
+            <video
+              src={project.images[0]}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                pointerEvents: "none",
+              }}
+            />
+          ) : (
+            <img
+              src={project.images[0]}
+              alt={project.title}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
@@ -294,6 +332,9 @@ function AnimatedCard({ project, index, total, scrollProgress }) {
     nextSlot ? [0, 0.3] : [0, 0]
   );
 
+  // Tab fades out as the next card comes in, so old tabs don't stay visible forever
+  const tabOpacity = useTransform(overlayOpacity, (v) => 1 - v);
+
   return (
     <motion.div
       style={{
@@ -306,7 +347,12 @@ function AnimatedCard({ project, index, total, scrollProgress }) {
         willChange: "transform",
       }}
     >
-      <ProjectCard project={project} />
+      <ProjectCard
+        project={project}
+        tabColor={TAB_COLORS[index % TAB_COLORS.length]}
+        tabOffset={index * 60}
+        tabOpacity={tabOpacity}
+      />
       <motion.div
         style={{
           position: "absolute",
@@ -379,7 +425,7 @@ export default function Projects({ isActive }) {
             color: "#c4a0a0",
           }}
         >
-          / software
+          
         </p>
       </div>
 
@@ -391,7 +437,7 @@ export default function Projects({ isActive }) {
             position: "sticky",
             top: HEADER_HEIGHT,
             height: `calc(98vh - ${HEADER_HEIGHT})`,
-            padding: "7.0rem 4vw 1.2rem",
+            padding: "8.5rem 4vw 1.2rem",
             boxSizing: "border-box",
           }}
         >
@@ -401,7 +447,6 @@ export default function Projects({ isActive }) {
               width: "100%",
               height: "100%",
               borderRadius: "32px",
-              overflow: "hidden",
             }}
           >
             {projects.map((project, i) => (

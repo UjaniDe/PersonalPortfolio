@@ -75,7 +75,7 @@ export default function Hero({ isActive }) {
           whiteSpace: "nowrap",
           zIndex: 10,
         }}>
-          Hi this is ujani...
+          
         </p>
 
         {/* Group 2 — the premade polaroid+stamp image, center-left */}
@@ -93,7 +93,7 @@ export default function Hero({ isActive }) {
         <div style={{
           position: "absolute",
           top: "21vh",
-          right: "13vw",
+          right: "5vw",
           maxWidth: "min(380px, 52vw)",
           zIndex: 5,
         }}>

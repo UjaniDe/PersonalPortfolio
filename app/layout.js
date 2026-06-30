@@ -1,4 +1,5 @@
 import "./globals.css";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 export const metadata = {
   title: "Ujani De",
@@ -13,7 +14,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
       </head>
-      <body>{children}</body>
+      <body>
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }

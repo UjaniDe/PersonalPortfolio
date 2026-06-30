@@ -6,7 +6,7 @@ import Hero from "@/components/sections/Hero";
 import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Connect from "@/components/sections/Connect";
-
+import Navbar from "@/components/ui/Navbar";
 
 const sections = [Hero, Experience, Projects, Connect];
 const labels = ["Hero", "Experience", "Projects", "Connect"];
@@ -30,7 +30,6 @@ export default function Home() {
 
       const currentEl = sectionRefs.current[current];
       if (currentEl) {
-        // find the scrollable child — the div with overflowY auto
         const inner = currentEl.querySelector("[style*='overflow-y: auto']") || currentEl.firstChild;
         if (inner && inner.scrollHeight > inner.clientHeight) {
           const { scrollTop, scrollHeight, clientHeight } = inner;
@@ -102,7 +101,7 @@ export default function Home() {
 
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#1a1a18" }}>
-      
+      <Navbar current={current} onNavigate={goTo} />
 
       {sections.map((Section, i) => (
         <div

@@ -24,3 +24,7 @@ body {
   overflow-y: auto;
   padding: 4rem 6vw;
 }
+
+* {
+  cursor: none !important;
+}
